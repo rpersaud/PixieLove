@@ -1,20 +1,18 @@
 -- callback
 function love.load()
-  supported = love.graphics.checkMode (320, 480, false)
-  r, g, b = love.graphics.getBackgroundColor()
-  print (r .. g .. b)
-  modes = love.graphics.getModes()
+
   love.graphics.setBackgroundColor(135,196,250)
-  love.graphics.setColor(0,0,0)
+  boy = love.graphics.newImage("boy.png")
+  girl = love.graphics.newImage("catgirl.png")
+
 end
 
 -- callback
 function love.update()
-
 end
 
-
 function love.keypressed(key)
+
   if key == 'escape' then
 	love.event.push('q') -- quit the game
   end
@@ -30,13 +28,11 @@ end
 -- callback function
 function love.draw()
 
-  love.graphics.print("Hello World", 240, 150)
-  love.graphics.circle("line", 240, 150, 25, 6) -- cant draw circle from load
-
-  --[[
   local x = love.mouse.getX()
-  love.graphics.line(x,0,x,love.graphics.getHeight())
-  ]]--
+  local y = love.mouse.getY()
+  love.graphics.draw(boy, x, y, math.rad(45), 1, 1, 20, 20)
+  -- love.graphics.draw(boy, 0, 0, 0, 1, 1, 20, 50)
+  love.graphics.draw(girl, 0, 0, 0, 1, 1, 0, 0)
 
 end
 
