@@ -1,20 +1,43 @@
 -- callback
 function love.load()
 
-  love.graphics.setBackgroundColor(135,196,250)
-  boy = love.graphics.newImage("boy.png")
-  girl = love.graphics.newImage("catgirl.png")
+	-- our player
+	hero = love.graphics.newImage("catgirl.png")
+  player = {
+  	x = 130,
+  	y = 90
+  }
 
+	-- Set world for physics bodies to exist in 'https://love2d.org/wiki/Tutorial:Physics
+	world = love.physics.newWorld(0, 0, 800, 600)
+	world:setGravity(0, 100) -- not sure what x,y components of gravity do
+	world:setMeter(30) -- default 30 pixels per meter
+	
+	-- table to hold all our physical objects
+	objects = {}
+	
+	-- create the ground
+	objects.ground = {}
+	objects.ground.body = love.physics.newBody(world, 800/2, 600, 0, 0)
+	objects.ground.shape = love.physics.newRectangleShape(objects.ground.body, 0, 0, 800, 50, 0)
+	
+	-- initial graphics setup
+  love.graphics.setBackgroundColor(135,196,250)	
+	
 end
 
+
 -- callback
-function love.update()
+function love.update(dt)
+
+	world:update(dt) -- this puts the world into motion
+
 end
 
 function love.keypressed(key)
 
   if key == 'escape' then
-	love.event.push('q') -- quit the game
+		love.event.push('q') -- quit the game
   end
 
   -- Tab toggles whether or not mouse is allowed to leave window
@@ -23,56 +46,25 @@ function love.keypressed(key)
     love.mouse.setGrab(state)
   end
 
+	if key == "w" then
+		player.y = player.y - hero:getHeight()
+	elseif key == "s" then
+		player.y = player.y + hero:getHeight()
+	elseif key == "a" then
+		player.x = player.x - hero:getWidth()
+	elseif key == "d" then
+		player.x = player.x + hero:getWidth()
+	end
+	
+
 end
 
 -- callback function
 function love.draw()
 
-  local x = love.mouse.getX()
-  local y = love.mouse.getY()
-  love.graphics.draw(boy, x, y, math.rad(45), 1, 1, 20, 20)
-  -- love.graphics.draw(boy, 0, 0, 0, 1, 1, 20, 50)
-  love.graphics.draw(girl, 0, 0, 0, 1, 1, 0, 0)
+	love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
+	love.graphics.polygon("fill", objects.ground.shape:getPoints())
 
+ love.graphics.draw(hero, player.x, player.y)
 end
 
--- default function - https://love2d.org/wiki/love.run
-function love.run()
-
-  if love.load then love.load(arg) end
-
-  local dt = 0
-
-  -- Main loop time.
-  while true do
-    if love.timer then
-      love.timer.step()
-      dt = love.timer.getDelta()
-    end
-    if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
-    if love.graphics then
-      love.graphics.clear()
-      if love.draw then love.draw() end
-    end
-
-    -- Process events.
-    if love.event then
-      for e,a,b,c in love.event.poll() do
-        if e == "q" then
-          if not love.quit or not love.quit() then
-            if love.audio then
-              love.audio.stop()
-            end
-            return
-          end
-        end
-        love.handlers[e](a,b,c)
-      end
-    end
-
-    if love.timer then love.timer.sleep(1) end
-    if love.graphics then love.graphics.present() end
-
-  end
-
-end
