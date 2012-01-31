@@ -18,8 +18,8 @@ function love.load()
 	
 	-- create the ground
 	objects.ground = {}
-	objects.ground.body = love.physics.newBody(world, 800/2, 600, 0, 0)
-	objects.ground.shape = love.physics.newRectangleShape(objects.ground.body, 0, 0, 800, 50, 0)
+	objects.ground.body = love.physics.newBody(world, 800/2, 575, 0, 0)
+	objects.ground.shape = love.physics.newRectangleShape(objects.ground.body, 0, 0, 400, 50, 0)
 	
 	-- initial graphics setup
   love.graphics.setBackgroundColor(135,196,250)	
