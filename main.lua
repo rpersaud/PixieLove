@@ -1,3 +1,5 @@
+-- alt bands: silversun pickups, kasabian "underdog", young the giant "my body"
+
 -- callback
 function love.load()
 
@@ -18,8 +20,17 @@ function love.load()
 	
 	-- create the ground
 	objects.ground = {}
+<<<<<<< Updated upstream
 	objects.ground.body = love.physics.newBody(world, 800/2, 575, 0, 0)
 	objects.ground.shape = love.physics.newRectangleShape(objects.ground.body, 0, 0, 400, 50, 0)
+=======
+	
+	-- in box 2d, 
+	objects.ground.body = love.physics.newBody(world, 800/2, 175, 100, 10) -- world, x, y, m, i
+	
+	-- x,y here represent the starting area to draw for a 800x50 rectangle (offsets I guess)
+	objects.ground.shape = love.physics.newRectangleShape(objects.ground.body, 0, 0, 800, 50, 0) -- body, x, y, width, height, angle
+>>>>>>> Stashed changes
 	
 	-- initial graphics setup
   love.graphics.setBackgroundColor(135,196,250)	
