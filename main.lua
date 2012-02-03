@@ -1,5 +1,3 @@
--- alt bands: silversun pickups, kasabian "underdog", young the giant "my body"
-
 -- callback
 function love.load()
 
@@ -8,7 +6,7 @@ function love.load()
 
 	-- Set world for physics bodies to exist in 'https://love2d.org/wiki/Tutorial:Physics
 	world = love.physics.newWorld(0, 0, 800, 600)
-	world:setGravity(0, 400) -- not sure what x,y components of gravity do
+	world:setGravity(0, 40) -- not sure what x,y components of gravity do
 	world:setMeter(30) -- default 30 pixels per meter
 	
 	-- table to hold all our physical objects
@@ -23,7 +21,7 @@ function love.load()
 	
 	-- create the player
 	objects.player = {}
-	objects.player.body = love.physics.newBody(world, 800/2, 100, 10, 0)
+	objects.player.body = love.physics.newBody(world, 800/2, 100, 10, 45)
 	objects.player.shape = love.physics.newRectangleShape(objects.player.body, 0, 0, 71, 53, 0)
 	
 	-- initial graphics setup
@@ -49,11 +47,23 @@ function love.update(dt)
 	elseif love.keyboard.isDown("d") then
 		p:setX(p:getX() + speed)
 	end
+
+	-- can bounding box help clamp rotating object?
+	X1, Y1, X2, Y2, X3, Y3, X4, Y4 = objects.player.shape:getBoundingBox()
+  
+	-- calculate distance between boundingbox points
+	dxW = X3 - X2
+	dyW = Y3 - Y2
+	heroWidth = math.sqrt(math.pow(dxW,2) + math.pow(dyW,2))
 	
-	p:setX( math.min( math.max( p:getX(), hero:getWidth()/2 ), 800 - hero:getWidth()/2 ) )
+	dxH = X2 - X1
+	dyH = Y2 - Y1
+	heroHeight = math.sqrt(math.pow(dxH,2) + math.pow(dyH,2))
+	
+	p:setX( math.min( math.max( p:getX(), heroWidth/2 ), 800 - heroWidth/2 ) )
 	-- far left, min(max(0,71), 721) = 71; far right, min(max(721 +10,71), 721) = 721 
 	
-	p:setY( math.min( math.max( p:getY(), hero:getHeight()/2 ), 550 - hero:getHeight()/2 ) )
+	p:setY( math.min( math.max( p:getY(), heroHeight/2 ), 550 - heroHeight/2 ) )
 	-- top, min(max(53, 0), 547) = 0; bottom, min(max(573.5, 25.x), 573)
 	-- min(max(
 end
@@ -88,5 +98,19 @@ function love.draw()
 	love.graphics.print("hero-width:" .. hero:getWidth() .. ", hero-height:" .. hero:getHeight(), 10, 10)
 	love.graphics.print("x:" .. p:getX() .. ", y:" .. p:getY(), 10, 40)
 	love.graphics.print("angle:" .. p:getAngle(), 10,70)
-end
 
+	-- draw the image
+	--love.graphics.polygon("fill",objects.player.shape:getPoints())
+
+	-- display bounding box points
+    love.graphics.setColor(0,0,0,255)
+ 	
+	love.graphics.print("distance width: " .. math.floor(heroWidth), 10, 100)
+	love.graphics.print("distance height: " .. math.floor(heroHeight), 10, 110)
+	
+    love.graphics.print("X1, Y1", X1, Y1)
+    love.graphics.print("X2, Y2", X2, Y2)
+    love.graphics.print("X3, Y3", X3, Y3)
+    love.graphics.print("X4, Y4", X4, Y4)
+	
+end
