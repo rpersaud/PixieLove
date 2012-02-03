@@ -8,7 +8,7 @@ function love.load()
 
 	-- Set world for physics bodies to exist in 'https://love2d.org/wiki/Tutorial:Physics
 	world = love.physics.newWorld(0, 0, 800, 600)
-	world:setGravity(0, 100) -- not sure what x,y components of gravity do
+	world:setGravity(0, 400) -- not sure what x,y components of gravity do
 	world:setMeter(30) -- default 30 pixels per meter
 	
 	-- table to hold all our physical objects
@@ -75,14 +75,18 @@ end
 -- callback function
 function love.draw()
 	
+	-- draw ground
 	love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
 	love.graphics.polygon("fill", objects.ground.shape:getPoints())
 	
+	-- draw player
 	love.graphics.setColor(100,100,100)
 	local p = objects.player.body
-	love.graphics.draw(hero, p:getX(), p:getY(), p:getAngle(), 1, 1, hero:getWidth()/2, hero:getHeight()/2)
+	love.graphics.draw(hero, p:getX(), p:getY(), p:getAngle(), 1, 1, hero:getWidth()/2, hero:getHeight()/2) -- origin at center of image
 
+	-- print out debug info
 	love.graphics.print("hero-width:" .. hero:getWidth() .. ", hero-height:" .. hero:getHeight(), 10, 10)
 	love.graphics.print("x:" .. p:getX() .. ", y:" .. p:getY(), 10, 40)
+	love.graphics.print("angle:" .. p:getAngle(), 10,70)
 end
 
